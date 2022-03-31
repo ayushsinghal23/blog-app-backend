@@ -1,6 +1,6 @@
 const blockUser = user => {
   if (user?.isBlocked) {
-    throw new Error(`Access Denied ${user?.firstName} is blocked`);
+    throw new Error(`Sorry You are Blocked`);
   }
 };
 

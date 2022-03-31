@@ -7,7 +7,7 @@ const User = require("../../model/user/User");
 const validateMongodbId = require("../../utils/validateMongodbID");
 const cloudinaryUploadImg = require("../../utils/cloudinary");
 const blockUser = require("../../utils/blockUser");
-sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+// sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
 
 //-------------------------------------
 //Register
@@ -42,7 +42,7 @@ const loginUserCtrl = expressAsyncHandler(async (req, res) => {
   const userFound = await User.findOne({ email });
   //check if blocked
   if (userFound?.isBlocked)
-    throw new Error("Access Denied You have been blocked");
+    throw new Error("Sorry You Are Blocked");
   if (userFound && (await userFound.isPasswordMatched(password))) {
     //Check if password is match
     res.json({
@@ -108,7 +108,9 @@ const fetchUserDetailsCtrl = expressAsyncHandler(async (req, res) => {
 //User profile
 //------------------------------
 const userProfileCtrl = expressAsyncHandler(async (req, res) => {
+  console.log(req.params);
   const { id } = req.params;
+  
   validateMongodbId(id);
   //1.Find the login user
   //2. Check this particular if the login user exists in the array of viewedBy
@@ -399,6 +401,7 @@ const passwordResetCtrl = expressAsyncHandler(async (req, res) => {
 const profilePhotoUploadCtrl = expressAsyncHandler(async (req, res) => {
   //Find the login user
   const { _id } = req.user;
+  console.log("sddbch",req.user);
   //block user
   blockUser(req?.user);
   //1. Get the oath to img
